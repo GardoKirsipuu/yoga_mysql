@@ -37,7 +37,7 @@ con.connect(function(err) {
 // show all articles - index page
 app.get('/', (req, res) => {
 	let query = "SELECT * FROM article";
-	let qrticles = []
+	let articles = []
 	con.query(query, (err, result) => {
 		if (err) throw err;
 		articles = result
@@ -46,6 +46,20 @@ app.get('/', (req, res) => {
 		})
 	})
 });
+
+// show article by this slug
+app.get('/article/:slug', (req, res) => {
+	let query = `SELECT * FROM article WHERE slug="${req.params.slug}"`
+	let article
+	con.query(query, (err, result) => {
+		if (err) throw err;
+		article = result
+		console.log(article)
+		res.render('article', {
+			article: article
+		})
+	})
+})
 
 // app start point
 app.listen(3000, () => {
