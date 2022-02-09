@@ -54,9 +54,29 @@ app.get('/article/:slug', (req, res) => {
 	con.query(query, (err, result) => {
 		if (err) throw err;
 		article = result;
-		console.log(article)
 		res.render('article', {
 			article: article
+		})
+	})
+})
+
+// show articles by author
+app.get('/author/:id', (req, res) => {
+	let authorQuery = `SELECT name FROM author WHERE id = ${req.params.id}`
+	let author
+	let articlesQuery = `SELECT * FROM article WHERE author_id = ${req.params.id}`
+	let articles
+	//console.log()
+	con.query(articlesQuery, (err, result) => {
+		if (err) throw err;
+		articles = result
+	})
+	con.query(authorQuery, (err, result) => {
+		if (err) throw err;
+		author = result
+		res.render('author', {
+			author: author,
+			articles: articles
 		})
 	})
 })
